@@ -1,0 +1,16 @@
+#module load anaconda/2020.07
+#conda activate /scratch4/lflorea1/shared/sw/src/mj-cov_env
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M2/
+WORKDIR=${BASEDIR}/MntJulip
+SWDIR=/scratch4/lflorea1/shared/sw/src/MntJULiP-cov
+
+## collect diff splicing stats
+### DSR:
+python3  ${SWDIR}/filter_DSR_introns.py --dir ${WORKDIR}/Ctrl-vs-Test --pvalue 0.05 --qvalue 1.0 --dpsi 0.05
+
+wait
+
+## DSA:
+## FC=4.0
+#cat ${WORKDIR}/Ctrl-vs-Test/diff_introns.txt | grep -v value | awk '{ if (($8!="NA") && ($8*1.0<=0.05) && (($10 && ($11/($10*1.0)<1/4.0 || $11/($10*1.0)>4.0)) || ($11 && ($10/($11*1.0)<1/4.0 || $10/($11*1.0)>4.0)))) print $_; }'

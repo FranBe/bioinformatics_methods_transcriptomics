@@ -1,0 +1,22 @@
+module load samtools/1.15.1
+module load STAR/2.7.10a
+module load bedtools/2.30.0
+
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M2/
+SOALNDIR=${BASEDIR}/Sorted
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+WORKDIR=${BASEDIR}/IRFinder
+
+SWDIR=/scratch4/lflorea1/shared/sw/src/
+REFBASE=/scratch4/lflorea1/shared/genomes/mm39/
+IRFIDX=/scratch4/lflorea1/shared/genomes/mm39/irfinder_starref
+
+
+for i in SRR3734796 SRR3734797 SRR3734798 SRR3734820 SRR3734824 SRR3734825
+do
+   time IRFinder -m BAM -r ${IRFIDX} -t 10 -d ${WORKDIR}/${i} ${SOALNDIR}/${i}.so.bam &> ${WORKDIR}/irfinder.${i}.log
+done
+
+wait
+

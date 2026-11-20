@@ -1,0 +1,17 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/rmats_env
+
+DATADIR=/scratch16/lflorea1/projects/Coursera/M2/Star
+WORKDIR=/scratch16/lflorea1/projects/Coursera/M2/rMATS
+ANNOT=/scratch16/lflorea1/projects/Coursera/M2/gencode.vM30.annotation.gtf
+
+CTRLBAML=${WORKDIR}/ctrl_bams.rmats.list
+TESTBAML=${WORKDIR}/test_bams.rmats.list
+
+rmats.py --b1 ${CTRLBAML} --b2 ${TESTBAML} \
+         --gtf ${ANNOT} --od ${WORKDIR}/Ctrl-vs-Test --tmp ${WORKDIR}/Ctrl-vs-Test/tmp \
+         -t single --readLength 100 \
+         --novelSS \
+         --allow-clipping \
+         --nthread 10 &> rmats.log 
+
+wait

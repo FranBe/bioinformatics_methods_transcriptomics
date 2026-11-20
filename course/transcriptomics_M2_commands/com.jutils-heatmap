@@ -1,0 +1,52 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/jutils-1.5_env4/
+
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M2/
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+WORKDIR=${BASEDIR}/Jutils
+SWDIR=/scratch4/lflorea1/shared/sw/src/Jutils-1.5
+
+# rMATS - JCEC
+python3 ${SWDIR}/jutils.py heatmap --tsv-file ${WORKDIR}/rMATS_viz/rmats_JCEC_results.tsv \
+                                   --meta-file ${WORKDIR}/Ctrl-vs-Test_meta.tsv \
+                                   --q-value 0.05 --dpsi 0.05 \
+                                   --out-dir ${WORKDIR}/rMATS_viz/H_JCEC --prefix rmats_JCEC \
+                                   --pdf &> rmats_jcec.log
+wait
+
+exit;
+
+## MntJULiP - DSR (estimated counts)
+python3 ${SWDIR}/jutils.py heatmap --tsv-file ${WORKDIR}/MntJulip_viz/mntjulip_DSR_results.tsv \
+                                   --meta-file ${WORKDIR}/Ctrl-vs-Test_meta.tsv \
+                                   --p-value 0.05 --dpsi 0.05 --aggregate \
+                                   --out-dir ${WORKDIR}/MntJulip_viz/H_DSR --prefix mntjulip_DSR \
+                                   &> mntjulip_DSR.log
+wait
+
+## MntJULiP - DSA (estimated counts)
+python3 ${SWDIR}/jutils.py heatmap --tsv-file ${WORKDIR}/MntJulip_viz/mntjulip_DSA_results.tsv \
+                                   --meta-file ${WORKDIR}/Ctrl-vs-Test_meta.tsv \
+                                   --p-value 0.05 --fold-change 2.0 \
+                                   --out-dir ${WORKDIR}/MntJulip_viz/H_DSA --prefix mntjulip_DSA \
+                                   &> mntjulip_DSA.log
+wait
+exit;
+
+## explore DSR events at a subset of genes
+python3 ${SWDIR}/jutils.py heatmap --tsv-file ${WORKDIR}/MntJulip_viz/mntjulip_DSR_results_raw.tsv \
+                                   --meta-file ${WORKDIR}/Ctrl-vs-Test_meta.tsv \
+                                   --p-value 1.0 --dpsi 0.0 \
+                                   --gene-list-file Ctrl-vs-Test.genelist \
+                                   --out-dir ${WORKDIR}/MntJulip_viz/H_DSR_genes --prefix mntjulip_DSR_genes \
+                                   &> mntjulip_DSR_genes.log
+wait
+
+## explore DSA events at a subset of genes
+python3 ${SWDIR}/jutils.py heatmap --tsv-file ${WORKDIR}/MntJulip_viz/mntjulip_DSA_results_raw.tsv \
+                                   --meta-file ${WORKDIR}/Ctrl-vs-Test_meta.tsv \
+                                   --p-value 1.0 --fold-change 0.00001 \
+                                   --gene-list-file Ctrl-vs-Test.genelist \
+                                   --out-dir ${WORKDIR}/MntJulip_viz/H_DSA_genes --prefix mntjulip_DSA_genes \
+                                   &> mntjulip_DSA_genes.log
+wait

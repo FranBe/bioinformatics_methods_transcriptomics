@@ -1,0 +1,18 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/jutils-1.5_env4/
+
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M2/
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+WORKDIR=${BASEDIR}/Jutils
+SWDIR=/scratch4/lflorea1/shared/sw/src/Jutils-1.5
+
+# use common filters
+python3 ${SWDIR}/jutils.py venn-diagram --tsv-file-list tsvfile.list --p-value 0.05 --q-value 1.0 --out-dir Venn --dpsi 0.05 --prefix rmats_mntjulip
+
+wait
+
+# use customized per program filters
+python3 ${SWDIR}/jutils.py venn-diagram --tsv-file-list tsvfile.annot.list --out-dir Venn --prefix rmats_mntjulip_annot
+
+wait
+

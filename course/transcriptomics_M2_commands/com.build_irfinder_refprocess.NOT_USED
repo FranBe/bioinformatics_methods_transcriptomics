@@ -1,0 +1,9 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/irfinder_env
+
+SWDIR=/scratch4/lflorea1/shared/sw/src/
+REFBASE=/scratch4/lflorea1/shared/genomes/mm39/
+
+module load samtools/1.15.1
+module load STAR/2.7.10a
+
+IRFinder -m BuildRefProcess -r ${REFBASE}/irfinder_processref -t 10 2> irfinder_processref.log

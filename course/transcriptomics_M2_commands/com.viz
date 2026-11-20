@@ -1,0 +1,35 @@
+#!/bin/bash -l
+
+module load STAR/2.7.10a
+module load samtools/1.15.1
+
+ALNDIR=/scratch16/lflorea1/projects/Coursera/M2/Star/
+
+### Mbp: 18:82493271-82603762
+
+# extract Gencode gene annotations
+grep -w Mbp ../gencode.vM30.annotation.gtf > Mbp.gencode.vM39.gtf
+
+# extract Psiclass gene and transcript assemblies
+grep -w Mbp ../psiclass_vote.withStrand.gtf > Mbp.psiclass.gtf
+
+# generate index alignment files, if not created already
+for i in SRR3734796 SRR3734797 SRR3734798 SRR3734820 SRR3734824 SRR3734825
+do
+   if [ -f ${ALNDIR}/${i}_Aligned.sortedByCoord.out.bam.bai ]; then
+      echo "Index ${i}_Aligned.sortedByCoord.out.bam.bai exists, I will not overwrite it..."
+   else
+      samtools index ${ALNDIR}/${i}_Aligned.sortedByCoord.out.bam
+   fi
+done
+
+# extract alignments in the range
+for i in SRR3734796 SRR3734797 SRR3734798 SRR3734820 SRR3734824 SRR3734825
+do
+  
+  samtools view -b ../Star/${i}_Aligned.sortedByCoord.out.bam "18:82493271-82603762" > Mbp.${i}.bam
+  samtools index Mbp.${i}.bam
+done
+
+
+# view sashimi plot at 18:82593332

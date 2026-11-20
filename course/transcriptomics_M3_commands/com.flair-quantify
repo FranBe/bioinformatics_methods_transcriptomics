@@ -1,0 +1,16 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/flair_env
+  
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M3/
+WORKDIR=${BASEDIR}/Flair
+
+mkdir -p ${WORKDIR}/Quantify
+
+flair quantify -r ${WORKDIR}/reads_manifest.tsv \
+               -i ${WORKDIR}/Collapse/Annotation_reliant/annotation_reliant.isoforms.fa \
+               --isoform_bed ${WORKDIR}/Collapse/Annotation_reliant/annotation_reliant.isoforms.bed \
+               --output ${WORKDIR}/Quantify/GSE151841 \
+               --generate_map --stringent --check_splice 2> $WORKDIR/Quantify/com.flair-quantify.log
+
+wait
+
+exit;

@@ -1,0 +1,47 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/jutils-1.5_env4/
+
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M2/
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+WORKDIR=${BASEDIR}/Jutils
+SWDIR=/scratch4/lflorea1/shared/sw/src/Jutils-1.5
+
+## Part 1: Explore visualization for all and for filtered sets of events, and with customized categories 
+##
+## rMATS - JCEC (raw counts)
+# use all entries or filter entries:
+#         --q-value 0.05 --dpsi 0.05 \
+#         --p-value 1.0 --dpsi 0.0 \
+# use 'Ctrl-vs-Test_meta.annot.tsv' to distinguish additional categories (biological sex of animals)
+python3 ${SWDIR}/jutils.py pca     --tsv-file ${WORKDIR}/rMATS_viz/rmats_JCEC_results.tsv \
+                                   --meta-file ${WORKDIR}/Ctrl-vs-Test_meta.tsv \
+                                   --q-value 1.0 --dpsi 0.0 \
+                                   --label-point \
+                                   --out-dir ${WORKDIR}/rMATS_viz/P_JCEC --prefix rmats_JCEC \
+                                   &> rmats_jcec.log
+
+wait
+
+### Part 2: Illustrate PCA plots for MntJULiP results
+#
+## MntJULiP - DSR (estimated counts)
+# --p-value 0.05 --dpsi 0.05 --aggregate
+python3 ${SWDIR}/jutils.py pca     --tsv-file ${WORKDIR}/MntJulip_viz/mntjulip_DSR_results.tsv \
+                                   --meta-file ${WORKDIR}/Ctrl-vs-Test_meta.tsv \
+                                   --p-value 1.0 --dpsi 0.0 --aggregate \
+                                   --label-point \
+                                   --out-dir ${WORKDIR}/MntJulip_viz/P_DSR --prefix mntjulip_DSR \
+                                   &> mntjulip_DSR.log
+wait
+
+## MntJULiP - DSA (estimated counts)
+# --q-value 0.05 --fold-change 2.0
+python3 ${SWDIR}/jutils.py pca     --tsv-file ${WORKDIR}/MntJulip_viz/mntjulip_DSA_results.tsv \
+                                   --meta-file ${WORKDIR}/Ctrl-vs-Test_meta.tsv \
+                                   --p-value 1.0 \
+                                   --label-point \
+                                   --out-dir ${WORKDIR}/MntJulip_viz/P_DSA --prefix mntjulip_DSA \
+                                   &> mntjulip_DSA.log
+wait
+
+exit;

@@ -1,0 +1,45 @@
+#module load anaconda/2020.07
+#conda activate /scratch4/lflorea1/shared/sw/src/mj-cov_env
+
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M2/
+ALNDIR=${BASEDIR}/Star
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+WORKDIR=${BASEDIR}/MntJulip
+SWDIR=/scratch4/lflorea1/shared/sw/src/MntJULiP-cov
+
+# Part 1: compute the .splice files and/or check that they exist (needed for all)
+for i in SRR3734796 SRR3734797 SRR3734798 SRR3734820 SRR3734824 SRR3734825
+do
+   if [ -f ${ALNDIR}/${i}.splice ]; then 
+      echo "File ${i}.splice exists, I will not overwrite it..."
+   else
+      ${SWDIR}/bin/junc ${ALNDIR}/${i}_Aligned.sortedByCoord.out.bam -a > ${ALNDIR}/${i}.splice &
+   fi
+done
+
+wait
+
+# Part 2: report raw read counts only
+python3 ${SWDIR}/run.py --splice-list splicepaths.mntjulip.tsv \
+                        --anno-file ${ANNOT} \
+                        --raw-counts-only \
+                        --out-dir ${WORKDIR}/Ctrl-vs-Test.raw \
+                        --num-threads 24 &> mntjulip.Ctrl_vs_Test.raw.log
+wait
+
+# Part 3: no covariate, can use either of splicepaths.mntjulip.tsv or splicepaths.cov.mntjulip.tsv; report both model-estimated and raw read counts
+python3 ${SWDIR}/run.py --splice-list splicepaths.mntjulip.tsv \
+                        --anno-file ${ANNOT} \
+                        --out-dir ${WORKDIR}/Ctrl-vs-Test \
+                        --num-threads 24 &> mntjulip.Ctrl_vs_Test.log
+wait
+
+# Part 4: covariate; report both model-estimated and raw read counts
+python3 ${SWDIR}/run.py --splice-list splicepaths.cov.mntjulip.tsv \
+                        --anno-file ${ANNOT} \
+                        --out-dir ${WORKDIR}/Ctrl-vs-Test.cov \
+                        --num-threads 24 &> mntjulip.Ctrl_vs_Test.cov.log
+wait
+
+exit;

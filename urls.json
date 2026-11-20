@@ -1,0 +1,82 @@
+{
+"command_files":[
+  {
+    "Name": "transcriptomics_M1_commands",
+    "Description": "transcriptomics_M1_commands",
+    "URL": "https://d3c33hcgiwev3.cloudfront.net/5Z4Vjy5KR7afApUggiBFmA_59a812db7d4a4536b05754f0efd384f1_transcriptomics_M1_commands.tar.gz?Expires=1795274685&Signature=j-x0kPyGbG6ThHKa61tnGeuiSAYfZu77FIuEzjvbHrbZY0xrleZQjLmqIDZHW7ew~Pq0cjGgSbxZNLKF9TxKC3o0xVq5SCsZBQVNNOcuHdNK3IlbDXGrZhhs89Ns42Z17z7td8-7oZrZSPoxDDdRcJbbXac0~iYOEgD3WpVyhDk_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A",
+    "enabled": true
+  },
+  {
+    "Name": "transcriptomics_M2_commands",
+    "Description": "transcriptomics_M2_commands",
+    "URL": "https://d3c33hcgiwev3.cloudfront.net/Bevsm35FRuy3ZEcPeI1ilA_1318a1e0235c4e4e9d8065c0ee1ab8f1_transcriptomics_M2_commands.tar.gz?Expires=1795274685&Signature=RNeLEvPqiTCQf9F6cjiZlTnz-VpX4H8qIzEvxvIHKFIabz79pe0TYZKkvynLQBxAkpGVW8rR1vlDa1DA66QmVRphMQRjDLwxlqqeiPw3QrtCK8K3gSlzQ6ghRgVq5WOhn3slsvc9dNAOFc228O2QBL432Xof1cJgSoc8mrHlFgE_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A",
+    "enabled": true 
+  },
+  {
+    "Name": "transcriptomics_M3_commands",
+    "Description": "transcriptomics_M3_commands",
+    "URL": "https://d3c33hcgiwev3.cloudfront.net/_uRiHJsIQTK-a1B1ZtcDOQ_0bfc1366423d4a90848229734819a8f1_transcriptomics_M3_commands.tar.gz?Expires=1795274685&Signature=em4-cWrEnd5IThO60CiLuUZViNuskSgOb75e8dgFUCNMOo323NbgEeY1XVIDo1zDhwSA2B8DtRD4zhA93sC5XQE7UPRcdzESY4cnhyrQRqGsGFhShFtp8QLCbsEjFzu-xZtMBNY~0TQpTcCMDN808QlkeWcC-i3A~cm~pCLtQG0_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A",
+    "enabled": true 
+  },
+  {
+    "Name": "transcriptomics_M4_commands",
+    "Description": "transcriptomics_M4_commands",
+    "URL": "https://d3c33hcgiwev3.cloudfront.net/_uRiHJsIQTK-a1B1ZtcDOQ_0bfc1366423d4a90848229734819a8f1_transcriptomics_M4_commands.tar.gz?Expires=1795274685&Signature=em4-cWrEnd5IThO60CiLuUZViNuskSgOb75e8dgFUCNMOo323NbgEeY1XVIDo1zDhwSA2B8DtRD4zhA93sC5XQE7UPRcdzESY4cnhyrQRqGsGFhShFtp8QLCbsEjFzu-xZtMBNY~0TQpTcCMDN808QlkeWcC-i3A~cm~pCLtQG0_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A",
+    "enabled": true 
+  }
+],
+"data_files":[
+    {
+        "Name": "transcriptomics_proj1_data",
+        "Description": "transcriptomics_proj1_data",
+        "URL": "https://d3c33hcgiwev3.cloudfront.net/lTD7Q_PqQmKUSCGNcxDNRg_bd0d95f8701243e298d716e2eafc30f1_transcriptomics_proj1_data.tar.gz?Expires=1795274685&Signature=lfFl1v5igYrKwBzgZ6MjzNaxxDQORvpoy3CLqpBnkhLNQwOLTVV7LKScHQW895ki7p1Y0aixds52Uqfms8Vv1qk~SJcRcNeGfVc5laVK8ImpCURBg~6VmAbzwPVQBHturstWGjPHWOkL2GB13AnB2Q-RvXsvxJaSq3gI3pyiRdM_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A",
+        "enabled": true 
+    },
+    {
+        "Name": "transcriptomics_proj2_data",
+        "Description": "transcriptomics_proj2_data",
+        "URL": "https://d3c33hcgiwev3.cloudfront.net/lTD7Q_PqQmKUSCGNcxDNRg_bd0d95f8701243e298d716e2eafc30f1_transcriptomics_proj2_data.tar.gz?Expires=1795274685&Signature=lfFl1v5igYrKwBzgZ6MjzNaxxDQORvpoy3CLqpBnkhLNQwOLTVV7LKScHQW895ki7p1Y0aixds52Uqfms8Vv1qk~SJcRcNeGfVc5laVK8ImpCURBg~6VmAbzwPVQBHturstWGjPHWOkL2GB13AnB2Q-RvXsvxJaSq3gI3pyiRdM_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A",
+        "enabled": true
+    },
+    {
+        "Name": "transcriptomics_proj3_data",
+        "Description": "transcriptomics_proj3_data",
+        "URL": "https://d3c33hcgiwev3.cloudfront.net/lTD7Q_PqQmKUSCGNcxDNRg_bd0d95f8701243e298d716e2eafc30f1_transcriptomics_proj3_data.tar.gz?Expires=1795274685&Signature=lfFl1v5igYrKwBzgZ6MjzNaxxDQORvpoy3CLqpBnkhLNQwOLTVV7LKScHQW895ki7p1Y0aixds52Uqfms8Vv1qk~SJcRcNeGfVc5laVK8ImpCURBg~6VmAbzwPVQBHturstWGjPHWOkL2GB13AnB2Q-RvXsvxJaSq3gI3pyiRdM_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A",
+        "enabled": true
+    },
+    {
+        "Name": "transcriptomics_proj4_data",
+        "Description": "transcriptomics_proj4_data",
+        "URL": "https://d3c33hcgiwev3.cloudfront.net/lTD7Q_PqQmKUSCGNcxDNRg_bd0d95f8701243e298d716e2eafc30f1_transcriptomics_proj4_data.tar.gz?Expires=1795274685&Signature=lfFl1v5igYrKwBzgZ6MjzNaxxDQORvpoy3CLqpBnkhLNQwOLTVV7LKScHQW895ki7p1Y0aixds52Uqfms8Vv1qk~SJcRcNeGfVc5laVK8ImpCURBg~6VmAbzwPVQBHturstWGjPHWOkL2GB13AnB2Q-RvXsvxJaSq3gI3pyiRdM_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A",
+        "enabled": true
+    }
+],
+"docker": [
+    {
+        "Name": "Docker pre image",
+        "Description": "Pre-built dokcer image with all the necessary tools and dependencies for the course. Original from course.",
+        "URL": "https://d3c33hcgiwev3.cloudfront.net/bZKYKQcQSsmIq7tx1_lk_Q_a95993a631c641f986dae0b9a33d1cf1_cu_docker_v1.2.tar?Expires=1795269676&Signature=ANEs-EPIsAQlX~ePl6Ay~3OAyBxy4h-7qNDAQd5hhV-VSePCKdKBenSa2dOAvdOfWqp5wu1D0DIQZqY4yecLdZ3gvgxrV8jL~Oqu0~3fMX8T-yY0ZNNK9HUGvVLiFw40jLROfDvgtX3D6blTRoiIUTrAyldsF8TxahkvtaRQhzg_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A",
+        "enabled": false
+    },
+    {
+        "Name": "Docker guide",
+        "Description": "PDF document guide",
+        "URL": "https://www.coursera.org/api/rest/v1/asset/download/pdf/ww_UEYK0R2KK9OI6nct8xQ?pageStart=&pageEnd=",
+        "enabled": false
+    }
+],
+"virtual_box": [
+    {
+        "Name": "Virtual box pre image",
+        "Description": "Pre-built virtual box image with all the necessary tools and dependencies for the course. Original from course.",
+        "URL": "https://d3c33hcgiwev3.cloudfront.net/9m99QgZFSuaagB9KcdTXtg_87b16e0c880c42b7979178b73442a7f1_ubuntu-24.july.ova?Expires=1795269676&Signature=SnYSmlFmbIcFcXtGYdVnWFlWsTbGR~zMlZyU6NiNCo6LOuoYRslpL4epvHp7ol7qSljickhN7Kkb4Syc5Hlr8v~0-g8mEE663wrviqvobTfm20MNwYlJ~-kZAttuRVLpUjnEPQemvqE28afJAsMxc863KcNCZNNQbCZoswLC~50_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A",
+        "enabled": false
+    },
+    {
+        "Name": "Virtual box pre image guide",
+        "Description": "PDF document guide",
+        "URL": "https://www.coursera.org/api/rest/v1/asset/download/pdf/p3BaTEDwTg-kgXcE6Xn3TQ?pageStart=&pageEnd=",
+        "enabled": false
+    }
+]
+}

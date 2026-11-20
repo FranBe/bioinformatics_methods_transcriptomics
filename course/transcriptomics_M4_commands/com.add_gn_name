@@ -1,0 +1,28 @@
+#!/bin/bash -l
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M4_clean
+CMDDIR=${BASEDIR}/commands
+
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+
+ADDGN=${CMDDIR}/add_gn_name
+
+
+WORKDIR=${BASEDIR}/DESeq2/Results
+
+mkdir -p ${WORKDIR}/WithGeneNames
+
+for i in results_wt_vs_Smchd1.Isoquant-genes.csv  results_wt_vs_Smchd1.Isoquant-genes.pval05.csv  results_wt_vs_Smchd1.Isoquant-genes.qval05.csv 
+do
+   ${ADDGN} ${ANNOT} < ${WORKDIR}/${i} > ${WORKDIR}/WithGeneNames/gn_${i}
+done
+
+for i in results_wt_vs_Smchd1.Isoquant-transcripts.csv  results_wt_vs_Smchd1.Isoquant-transcripts.pval05.csv  results_wt_vs_Smchd1.Isoquant-transcripts.qval05.csv
+do
+   ${ADDGN} ${ANNOT} < ${WORKDIR}/${i} > ${WORKDIR}/WithGeneNames/gn_${i}
+done
+
+
+wait
+
+exit;

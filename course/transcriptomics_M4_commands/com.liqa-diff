@@ -1,0 +1,17 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/liqa_env
+  
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M4_clean/
+WORKDIR=${BASEDIR}/Liqa
+
+#### Perform differential splicing analysis 
+mkdir -p ${WORKDIR}/Diff
+
+liqa    -task diff \
+	-condition_1 ${WORKDIR}/wt_list.txt \
+	-condition_2 ${WORKDIR}/smchd1_list.txt \
+	-out ${WORKDIR}/Diff/GSE151841.diff_splicing.tsv \
+        &> com.liqa-diff.log
+
+wait
+
+exit;

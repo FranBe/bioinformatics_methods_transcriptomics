@@ -1,0 +1,13 @@
+for i in SRR13044180 SRR13044181 SRR13044182 SRR13044183 SRR13044184 SRR13044185 SRR13044186 
+do
+   echo ${i}
+
+   # num aligns
+   echo "num_aligns: "; cut -f1,3 ${i}.sam | grep -v "\*" |  wc -l
+   # num mapped reads
+   echo "num_mapped_reads: "; cut -f1,3 ${i}.sam | grep -v "\*" | cut -f1 | uniq | wc -l
+   # num uniquely mapped reads
+   echo "num_uniq:" ; cut -f1,3 ${i}.sam | grep -v "\*" | cut -f1 | uniq -c | grep -c " 1 "
+   # num multi-mapped reads
+   echo "num_multi"; cut -f1,3 ${i}.sam | grep -v "\*" | cut -f1 | uniq -c | grep -v " 1 " | wc -l
+done

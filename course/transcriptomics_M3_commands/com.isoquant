@@ -1,0 +1,38 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/isoquant_env
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M3/
+ALNDIR=${BASEDIR}/Minimap2
+WORKDIR=${BASEDIR}/Isoquant
+GENOME=/scratch4/lflorea1/shared/genomes/mm39/mm39c.fa
+MINIDX=/scratch4/lflorea1/shared/genomes/mm39/mm39c.mmi
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+
+
+# reference-free (no annotation)
+isoquant.py -d nanopore \
+            --bam ${ALNDIR}/SRR13044180.sorted.bam ${ALNDIR}/SRR13044181.sorted.bam ${ALNDIR}/SRR13044182.sorted.bam ${ALNDIR}/SRR13044183.sorted.bam ${ALNDIR}/SRR13044184.sorted.bam ${ALNDIR}/SRR13044185.sorted.bam ${ALNDIR}/SRR13044186.sorted.bam \
+            --labels "wt_Rep_1" "Smchd1_Rep_1" "Smchd1_Rep_2" "wt_Rep_2" "wt_Rep_3" "wt_Rep_4" "Smchd1_Rep_3" \
+            --reference ${GENOME} \
+            --count_exons \
+            --read_group file_name \
+            --prefix no_annot --output ${WORKDIR}/No_annot/ \
+            2> ${WORKDIR}/isoquant_no_annot.log
+
+wait
+
+# with reference annotation, SQANTI
+isoquant.py -d nanopore \
+            --bam ${ALNDIR}/SRR13044180.sorted.bam ${ALNDIR}/SRR13044181.sorted.bam ${ALNDIR}/SRR13044182.sorted.bam ${ALNDIR}/SRR13044183.sorted.bam ${ALNDIR}/SRR13044184.sorted.bam ${ALNDIR}/SRR13044185.sorted.bam ${ALNDIR}/SRR13044186.sorted.bam \
+            --labels "wt_Rep_1" "Smchd1_Rep_1" "Smchd1_Rep_2" "wt_Rep_2" "wt_Rep_3" "wt_Rep_4" "Smchd1_Rep_3" \
+            --complete_genedb --genedb ${ANNOT} \
+            --reference ${GENOME} \
+            --count_exons \
+            --sqanti_output \
+            --read_group file_name \
+            --prefix ref_annot --output ${WORKDIR}/Ref_annot/ \
+            2> ${WORKDIR}/isoquant_ref_annot.log
+
+wait
+
+
+exit;

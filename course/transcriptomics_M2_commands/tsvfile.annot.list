@@ -1,0 +1,2 @@
+/scratch16/lflorea1/projects/Coursera/M2/Jutils/rMATS_viz/rmats_JCEC_results.tsv	rmats	'--q-val 0.05 --dpsi 0.05'
+/scratch16/lflorea1/projects/Coursera/M2/Jutils/MntJulip_viz/mntjulip_DSR_results.tsv	mntjulip_DSR	'--p-val 0.05 --q-val 1.0 --dpsi 0.05'

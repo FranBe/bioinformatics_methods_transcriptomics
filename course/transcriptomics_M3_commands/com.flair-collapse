@@ -1,0 +1,56 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/flair_env
+  
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M3/
+DATADIR=${BASEDIR}/Data/FASTQ
+WORKDIR=${BASEDIR}/Flair
+GENOME=/scratch4/lflorea1/shared/genomes/mm39/mm39c.fa
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+
+mkdir -p Collapse
+
+if [ -f ${WORKDIR}/Collapse/GSE151841_all_corrected.bed ]; then
+    echo "Concatenated file GSE151841_all_corrected.bed exists, I will not overwrite it..."
+else
+   cat ${WORKDIR}/Correct/SRR13044180_all_corrected.bed \
+       ${WORKDIR}/Correct/SRR13044181_all_corrected.bed \
+       ${WORKDIR}/Correct/SRR13044182_all_corrected.bed \
+       ${WORKDIR}/Correct/SRR13044183_all_corrected.bed \
+       ${WORKDIR}/Correct/SRR13044184_all_corrected.bed \
+       ${WORKDIR}/Correct/SRR13044185_all_corrected.bed \
+       ${WORKDIR}/Correct/SRR13044186_all_corrected.bed > ${WORKDIR}/Collapse/GSE151841_all_corrected.bed
+fi
+
+READFILES=${DATADIR}/SRR13044180.fastq.gz,${DATADIR}/SRR13044181.fastq.gz,${DATADIR}/SRR13044182.fastq.gz,${DATADIR}/SRR13044183.fastq.gz,${DATADIR}/SRR13044184.fastq.gz,${DATADIR}/SRR13044185.fastq.gz,${DATADIR}/SRR13044186.fastq.gz
+
+# annotation-reliant, for a well annotated species
+mkdir -p ${WORKDIR}/Collapse/Annotation_reliant
+
+flair collapse -g ${GENOME} -q ${WORKDIR}/Collapse/GSE151841_all_corrected.bed \
+               -r ${READFILES} --gtf ${ANNOT} \
+               --output ${WORKDIR}/Collapse/Annotation_reliant/annotation_reliant \
+               --stringent --check_splice \
+               --threads 12 \
+               --generate_map --annotation_reliant generate &> ${WORKDIR}/Collapse/collapse.annotation_reliant.log &
+
+#wait
+
+# not annotation reliant, to discover novel isoforms for a low annotated species; potential for false positives
+mkdir -p ${WORKDIR}/Collapse/No_redundant
+
+flair collapse -g ${GENOME} -q ${WORKDIR}/Collapse/GSE151841_all_corrected.bed \
+               -r ${READFILES} --gtf ${ANNOT} \
+               --output ${WORKDIR}/Collapse/No_redundant/no_redundant \
+               --stringent --check_splice \
+               --threads 12 \
+               --generate_map --no_redundant best_only &> ${WORKDIR}/Collapse/collapse.no_redundant.log &
+
+wait
+
+exit;
+
+### Other options (source: FLAIR manuala at https://flair.readthedocs.io/en/latest/)
+#--max_end (versus --no_redundant best_only) :: Maximum number of TSS/TES picked per isoform (default: 2).
+#--no_redundant :: For each unique splice junction chain, report only one TSS/TES (e.g., none, best_only, longest)
+#--annotation_reliant generate :: Specify transcript fasta that corresponds to transcripts in the GTF to run annotation reliant flair collapse; to ask flair to generate the fast file, run with 'generate'. Note: in FLAIR2, this argument invokes an alignment of the reads to an annotated transcriptome first, followed by novel isoform detection.
+#--trust_ends :: Use if reads are generated from a long read method with minimal fragmentation
+

@@ -1,0 +1,13 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/flair_env
+  
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M4_clean/
+DATADIR=/scratch16/lflorea1/projects/Coursera/LiveDemo/M3/Flair/
+WORKDIR=${BASEDIR}/Flair
+
+mkdir -p ${WORKDIR}/DiffExp
+
+flair diffExp -q ${DATADIR}/Quantify/GSE151841.counts.tsv --out_dir ${WORKDIR}/DiffExp --out_dir_force -t 12 &> ${WORKDIR}/com.flair-diffExp.log
+
+wait
+
+exit;

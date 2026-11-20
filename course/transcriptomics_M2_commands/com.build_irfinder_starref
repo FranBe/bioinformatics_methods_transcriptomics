@@ -1,0 +1,10 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/irfinder_env/
+
+SWDIR=/scratch4/lflorea1/shared/sw/src/
+REFBASE=/scratch4/lflorea1/shared/genomes/mm39/
+
+module load samtools/1.15.1
+module load STAR/2.7.10a
+module load bedtools/2.30.0
+
+IRFinder -m BuildRefFromSTARRef -r ${REFBASE}/irfinder_starref -x ${REFBASE}/star -f ${REFBASE}/mm39c.fa -g ${REFBASE}/gencode.vM30.annotation.gtf

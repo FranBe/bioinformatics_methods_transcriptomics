@@ -1,0 +1,34 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/flair_env
+  
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M4_clean/
+DATADIR=/scratch16/lflorea1/projects/Coursera/LiveDemo/M3/Flair
+WORKDIR=${BASEDIR}/Flair
+
+mkdir -p ${WORKDIR}/DiffSplice
+
+
+## create the event list but do not test for differential splicing (default filter parameters)
+time \
+flair diffSplice -i ${DATADIR}/Collapse/Annotation_reliant/annotation_reliant.isoforms.bed \
+                 -q ${DATADIR}/Quantify/GSE151841.counts.tsv \
+                 --drim1 6 --drim2 3 --drim3 15 --drim4 5 \
+                 --out_dir ${WORKDIR}/DiffSplice/NoDiffTest --out_dir_force -t 12 &> ${WORKDIR}/com.flair-diffSplice.notest.log
+
+wait
+
+## create the event list and test for differential splicing at event level (default filter parameters)
+time \
+flair diffSplice -i ${DATADIR}/Collapse/Annotation_reliant/annotation_reliant.isoforms.bed \
+                 -q ${DATADIR}/Quantify/GSE151841.counts.tsv \
+                 --drim1 6 --drim2 3 --drim3 15 --drim4 5 \
+                 --test \
+                 --out_dir ${WORKDIR}/DiffSplice/DiffTest --out_dir_force -t 12 &> ${WORKDIR}/com.flair-diffSplice.test.log
+
+wait
+
+exit;
+
+##  drim1 - min # samples that have coverage over an event (6)
+##  drim2 - min # number of samples expressing the inclusion for of an event (3)
+##  drim3 - min # reads covering an event (15)
+##  drim4 - min # reds covering the inclusion form of an event (5)

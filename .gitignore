@@ -1,0 +1,16 @@
+# Files
+.env
+
+
+
+
+
+# Course files
+
+
+# Data
+data/
+
+# Docker images and VMs
+vm/
+docker/images/

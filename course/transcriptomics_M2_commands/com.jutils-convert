@@ -1,0 +1,18 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/jutils-1.5_env4/
+
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M2/
+WORKDIR=${BASEDIR}/Jutils
+SWDIR=/scratch4/lflorea1/shared/sw/src/Jutils-1.5
+
+## convert rMATS output to TSV
+python3 ${SWDIR}/jutils.py convert-results --rmats-dir ${BASEDIR}/rMATS/Ctrl-vs-Test/ --out-dir rMATS_viz &> jutils.rmats.log
+
+wait
+
+## convert mntjulip output to TSV
+python3 ${SWDIR}/jutils.py convert-results --mntjulip-dir ${BASEDIR}/MntJulip/Ctrl-vs-Test/ --out-dir MntJulip_viz &> jutils.mntjulip.log
+
+wait
+
+exit;

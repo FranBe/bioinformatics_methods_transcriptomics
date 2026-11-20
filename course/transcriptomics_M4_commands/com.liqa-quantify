@@ -1,0 +1,43 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/liqa_env
+  
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M4_clean/
+WORKDIR=${BASEDIR}/Liqa
+ALNDIR=/scratch16/lflorea1/projects/Coursera/M3/Minimap2
+REFGENE=${WORKDIR}/gencode.vM30.annotation.refgene
+
+module load samtools/1.15.1
+
+#### Filter alignments and perform per sample quantification
+mkdir -p ${WORKDIR}/Alignments
+
+## Step 1: remove entries that are unmapped, that are not primary alignments and that are supplementary alignments;
+## and for which the alignment quality is <50 (-q)
+for i in SRR13044181 SRR13044182 SRR13044183 SRR13044184 SRR13044185 SRR13044186 # SRR13044180
+do 
+   if [ -f ${WORKDIR}/Alignments/${i}.sorted.filtered.bam ]; then
+      echo "Filtered BAM file ${i}.sorted.filtered.bam exists, I will not overwrite it ..."
+      samtools index ${WORKDIR}/Alignments/${i}.sorted.filtered.bam
+   else
+      samtools view ${ALNDIR}/${i}.sorted.bam -F 2308 -q 50 -O BAM -o ${WORKDIR}/Alignments/${i}.sorted.filtered.bam
+      samtools index ${WORKDIR}/Alignments/${i}.sorted.filtered.bam
+   fi
+done
+
+wait
+
+## Step 2: quantify each sample
+mkdir -p ${WORKDIR}/Quantify
+
+for i in SRR13044180 SRR13044181 SRR13044182 SRR13044183 SRR13044184 SRR13044185 SRR13044186
+do
+   liqa -task quantify -refgene ${REFGENE} \
+                       -bam ${WORKDIR}/Alignments/${i}.sorted.filtered.bam \
+                       -out ${WORKDIR}/Quantify/${i}.isoform_expr.tsv \
+                       -max_distance 20 -f_weight 1 \
+                       &> com.liqa-quantify.${i}.log &
+done
+
+wait
+
+exit;
+

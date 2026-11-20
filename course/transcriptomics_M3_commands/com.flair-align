@@ -1,0 +1,40 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/flair_env
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M3/
+DATADIR=${BASEDIR}/Data/FASTQ
+WORKDIR=${BASEDIR}/Flair
+GENOME=/scratch4/lflorea1/shared/genomes/mm39/mm39c.fa
+MINIDX=/scratch4/lflorea1/shared/genomes/mm39/mm39c.mmi
+
+module load samtools/1.15.1
+
+
+mkdir -p Align
+
+# Use the previously aligned (with minimap2) reads...
+for i in SRR13044180 SRR13044181 SRR13044182 SRR13044183 SRR13044184 SRR13044185 SRR13044186 
+do
+  if [ -f ${WORKDIR}/Align/${i}.bed ]; then
+     echo "File ${i}.bed exists, I will not overwrite it..."
+  else
+     bam2Bed12 -i ${BASEDIR}/Minimap2/${i}.sorted.bam > ${WORKDIR}/Align/${i}.bed
+  fi
+done
+
+wait
+
+#exit;
+
+# OR, alternatively, generate a new set of alignments
+for i in SRR13044180 SRR13044181 SRR13044182 SRR13044183 SRR13044184 SRR13044185 SRR13044186
+do
+   if [ -f ${WORKDIR}/Align/${i}.bed ]; then
+      echo "File ${i}.bed exists, I will not overwrite it..."
+   else
+      flair align -g ${GENOME} -r ${DATADIR}/${i}.fastq.gz --output ${WORKDIR}/Align/${i} --nvrna 2> ${WORKDIR}/Align/${i}.align.log
+   fi
+done
+
+wait
+
+exit;

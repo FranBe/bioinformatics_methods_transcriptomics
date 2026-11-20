@@ -1,0 +1,16 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/liqa_env
+  
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M4_clean/
+WORKDIR=${BASEDIR}/Liqa
+ALNDIR=/scratch16/lflorea1/projects/Coursera/LiveDemo/M3/Minimap2
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+
+module load samtools/1.15.1
+
+#### Format the reference annotation
+liqa -task refgene -ref ${ANNOT} -format gtf -out ${WORKDIR}/gencode.vM30.annotation.refgene
+
+wait
+
+exit;
+

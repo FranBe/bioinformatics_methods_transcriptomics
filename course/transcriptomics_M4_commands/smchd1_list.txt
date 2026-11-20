@@ -1,0 +1,3 @@
+/scratch16/lflorea1/projects/Coursera/M4_clean/Liqa/Quantify/SRR13044181.isoform_expr.tsv
+/scratch16/lflorea1/projects/Coursera/M4_clean/Liqa/Quantify/SRR13044182.isoform_expr.tsv
+/scratch16/lflorea1/projects/Coursera/M4_clean/Liqa/Quantify/SRR13044186.isoform_expr.tsv

@@ -1,0 +1,31 @@
+#conda activate /scratch4/lflorea1/shared/sw/src/flair_env
+  
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M3/
+WORKDIR=${BASEDIR}/Flair
+GENOME=/scratch4/lflorea1/shared/genomes/mm39/mm39c.fa
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+
+SRBAMS=${BASEDIR}/Star/SRR1793544_Aligned.sortedByCoord.out.bam,${BASEDIR}/Star/SRR1793545_Aligned.sortedByCoord.out.bam,${BASEDIR}/Star/SRR1793546_Aligned.sortedByCoord.out.bam,${BASEDIR}/Star/SRR1793547_Aligned.sortedByCoord.out.bam,${BASEDIR}/Star/SRR1793548_Aligned.sortedByCoord.out.bam,${BASEDIR}/Star/SRR1793549_Aligned.sortedByCoord.out.bam
+
+mkdir -p Correct
+
+if [ -f ${WORKDIR}/Correct/junctions_from_sam_junctions.bed ]; then
+    echo "File junctions_from_sam_junctions.bed exists, I will not overwrite it ..."
+else
+   junctions_from_sam -s ${SRBAMS} --unique -n ${WORKDIR}/Correct/junctions_from_sam -l 100
+fi
+
+wait
+
+for i in SRR13044180 SRR13044181 SRR13044182 SRR13044183 SRR13044184 SRR13044185 SRR13044186
+do
+   flair correct -q ${WORKDIR}/Align/${i}.bed -f ${ANNOT} -g ${GENOME} \
+                 --output ${WORKDIR}/Correct/${i} \
+                 --nvrna \
+                 --shortread ${WORKDIR}/Correct/junctions_from_sam_junctions.bed \
+                 --print_check 2> ${WORKDIR}/Correct/${i}.correct.log
+done
+
+wait
+
+exit;

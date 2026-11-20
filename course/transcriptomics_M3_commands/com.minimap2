@@ -1,0 +1,50 @@
+# conda activate /scratch4/lflorea1/shared/sw/src/minimap2_env
+
+#!/bin/bash -l
+
+## minimap2 script
+MINIMAP2=minimap2
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M3/
+DATADIR=${BASEDIR}/Data/FASTQ
+WORKDIR=${BASEDIR}/Minimap2
+GENOME=/scratch4/lflorea1/shared/genomes/mm39/mm39c.fa
+MINIDX=/scratch4/lflorea1/shared/genomes/mm39/mm39c.mmi
+
+# generate a reference index
+${MINIMAP2} -d ${MINIDX} -k14 ${GENOME} 2> minimap2_index.log
+
+# align sequences to the genome via the .mmi index
+# wild-type replicates
+for i in SRR13044180 SRR13044183 SRR13044184 SRR13044185 
+do
+  $MINIMAP2 -ax splice -uf -N 0 \
+            -o ${WORKDIR}/${i}.sam -t 8 \
+            ${MINIDX} ${DATADIR}/${i}.fastq.gz \
+            2> ${WORKDIR}/${i}.minimap2.log &
+done
+
+wait
+
+# Smchd1 null replicates
+for i in SRR13044181 SRR13044182 SRR13044186
+do
+  $MINIMAP2 -ax splice -uf -N 0 \
+            -o ${WORKDIR}/${i}.sam -t 8 \
+            ${MINIDX} ${DATADIR}/${i}.fastq.gz \
+            2> ${WORKDIR}/${i}.minimap2.log &   
+done
+
+wait
+
+##############################################################
+######  sort by position in the genome and output BAM;
+######  then create an index of the coordinate sorted BAM file
+for i in SRR13044180 SRR13044181 SRR13044182 SRR13044183 SRR13044184 SRR13044185 SRR13044186
+do
+   samtools sort ${i}.sam -O BAM -o ${i}.sorted.bam
+   samtools index ${i}.sorted.bam
+done
+
+wait
+
+exit;

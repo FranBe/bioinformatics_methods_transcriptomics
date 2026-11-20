@@ -1,0 +1,39 @@
+#!/usr/bin/bash
+
+module load samtools/1.15.1
+module load bedtools/2.30.0
+
+# Genomic interval for the Smchd1 gene: 17:71651000-71783000
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M4_clean/
+WORKDIR=${BASEDIR}/Viz.Smchd1
+REGION=${WORKDIR}/Smchd1.bed
+
+### prepare local alignment file
+samtools view -b ${BASEDIR}/../M3/Minimap2/SRR13044180.sorted.bam "17:71651000-71783000" > ${WORKDIR}/Smchd1.SRR13044180.minimap2.bam
+samtools index ${WORKDIR}/Smchd1.SRR13044180.minimap2.bam
+
+
+### prepare BAM files of filtered alignments, all samples
+### first, wt:
+for i in SRR13044180 SRR13044183 SRR13044184 SRR13044185
+do
+   samtools view -b ${BASEDIR}/Liqa/Alignments/${i}.sorted.filtered.bam "17:71651000-71783000" > ${WORKDIR}/wt_Smchd1.${i}.minimap2.bam
+   samtools index ${WORKDIR}/wt_Smchd1.${i}.minimap2.bam
+done
+
+### then mutant:
+for i in SRR13044181 SRR13044182 SRR13044186
+do
+   samtools view -b ${BASEDIR}/Liqa/Alignments/${i}.sorted.filtered.bam "17:71651000-71783000" > ${WORKDIR}/smchd1_Smchd1.${i}.minimap2.bam
+   samtools index ${WORKDIR}/smchd1_Smchd1.${i}.minimap2.bam
+done
+
+### ...and the GENCODE gene annotations
+bedtools intersect -u -a ${BASEDIR}/gencode.vM30.annotation.gtf -b ${REGION} > ${WORKDIR}/Smchd1.GENCODE.gtf
+grep -P "\texon\t" ${WORKDIR}/Smchd1.GENCODE.gtf > ${WORKDIR}/tmp ; mv ${WORKDIR}/tmp ${WORKDIR}/Smchd1.GENCODE.gtf
+
+wait
+
+exit;
+

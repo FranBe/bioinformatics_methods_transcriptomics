@@ -1,0 +1,52 @@
+#!/usr/bin/bash
+
+module load samtools/1.15.1
+module load bedtools/2.30.0
+
+# Genomic interval for the Mbp gene: 18:82480000-82605000
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M3/
+WORKDIR=${BASEDIR}/Viz
+REGION=${WORKDIR}/Mbp.bed
+
+### prepare local alignment file
+samtools view -b ${BASEDIR}/Minimap2/SRR13044180.sorted.bam "18:82480000-82605000" > ${WORKDIR}/Mbp.SRR13044180.minimap2.bam
+samtools index ${WORKDIR}/Mbp.SRR13044180.minimap2.bam
+
+
+### prepare BED file of alignments, corrected and inconsistenyt alignments, and GENCODE annotations; sample SRR13044180
+bedtools intersect -u -a ${BASEDIR}/Flair/Align/SRR13044180.bed -b ${REGION} > ${WORKDIR}/Mbp.SRR13044180.input.bed
+
+bedtools intersect -u -a ${BASEDIR}/gencode.vM30.annotation.gtf -b ${REGION} > ${WORKDIR}/Mbp.GENCODE.gtf
+grep -P "\texon\t" ${WORKDIR}/Mbp.GENCODE.gtf > ${WORKDIR}/tmp ; mv ${WORKDIR}/tmp ${WORKDIR}/Mbp.GENCODE.gtf
+
+bedtools intersect -u -a ${BASEDIR}/Flair/Correct/SRR13044180_all_corrected.bed  -b ${REGION} > ${WORKDIR}/Mbp.SRR13044180_all_corrected.bed
+bedtools intersect -u -a ${BASEDIR}/Flair/Correct/SRR13044180_all_inconsistent.bed  -b ${REGION} > ${WORKDIR}/Mbp.SRR13044180_all_inconsistent.bed
+
+
+### prepare BED files of alignments, corrected alignments, inconsistent alignments for the other samples, if desired
+#for i in SRR13044181 SRR13044182 SRR13044183 SRR13044184 SRR13044185 SRR13044186
+#do
+#   bedtools intersect -u -a ${BASEDIR}/Flair/Align/SRR13044180.bed -b ${REGION} > ${BASEDIR}/${WORKDIR}/Mbp.SRR13044180.input.bed
+#   bedtools intersect -u -a ${BASEDIR}/Flair/Correct/${i}_all_corrected.bed  -b ${REGION} > ${WORKDIR}/Mbp.${i}_all_corrected.bed
+#   bedtools intersect -u -a ${BASEDIR}/Flair/Correct/${i}_all_inconsistent.bed  -b ${REGION} > ${WORKDIR}/Mbp.${i}_all_inconsistent.bed 
+#done
+
+bedtools intersect -u -a ${BASEDIR}/Flair/Collapse/GSE151841_all_corrected.bed  -b ${REGION} > ${WORKDIR}/Mbp.GSE151841_all_corrected.bed
+
+### prepare BED files of collapsed (final) transcript set
+#Annotation reliant
+bedtools intersect -u -a ${BASEDIR}/Flair/Collapse/Annotation_reliant/annotation_reliant.annotated_transcripts.bed -b ${REGION} > ${WORKDIR}/Mbp.collapse.annot_reliant.annotated_transcripts.bed
+bedtools intersect -u -a ${BASEDIR}/Flair/Collapse/Annotation_reliant/annotation_reliant.annotated_transcripts.supported.bed -b ${REGION} > ${WORKDIR}/Mbp.collapse.annot_reliant.annotated_transcripts.supported.bed
+bedtools intersect -u -a ${BASEDIR}/Flair/Collapse/Annotation_reliant/annotation_reliant.isoforms.bed -b ${REGION} > ${WORKDIR}/Mbp.collapse.annot_reliant.isoforms.bed
+
+###Annotation free ('no_redundant')
+bedtools intersect -u -a ${BASEDIR}/Flair/Collapse/No_redundant/no_redundant.isoforms.bed -b ${REGION} > ${WORKDIR}/Mbp.collapse.no_redundant.isoforms.bed
+
+### prepare GTF files of IsoQuant annotations
+bedtools intersect -u -a ${BASEDIR}/Isoquant/Ref_annot/ref_annot/ref_annot.transcript_models.gtf -b ${REGION} > ${WORKDIR}/Mbp.isoquant.ref_annot.transcript_models.gtf
+
+wait
+
+exit;
+

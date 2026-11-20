@@ -1,0 +1,6 @@
+/scratch16/lflorea1/projects/Coursera/M2/IRFinder/SRR3734796/IRFinder-IR-nondir.txt
+/scratch16/lflorea1/projects/Coursera/M2/IRFinder/SRR3734797/IRFinder-IR-nondir.txt
+/scratch16/lflorea1/projects/Coursera/M2/IRFinder/SRR3734798/IRFinder-IR-nondir.txt
+/scratch16/lflorea1/projects/Coursera/M2/IRFinder/SRR3734820/IRFinder-IR-nondir.txt
+/scratch16/lflorea1/projects/Coursera/M2/IRFinder/SRR3734824/IRFinder-IR-nondir.txt
+/scratch16/lflorea1/projects/Coursera/M2/IRFinder/SRR3734825/IRFinder-IR-nondir.txt

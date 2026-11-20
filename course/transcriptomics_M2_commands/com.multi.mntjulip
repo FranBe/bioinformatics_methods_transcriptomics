@@ -1,0 +1,39 @@
+#module load anaconda/2020.07
+#conda activate /scratch4/lflorea1/shared/sw/src/mj-cov_env
+
+
+BASEDIR=/scratch16/lflorea1/projects/Coursera/M2/
+ALNDIR=${BASEDIR}/Star
+ANNOT=${BASEDIR}/gencode.vM30.annotation.gtf
+WORKDIR=${BASEDIR}/MntJulip
+SWDIR=/scratch4/lflorea1/shared/sw/src/MntJULiP-cov
+
+for i in SRR3734796 SRR3734797 SRR3734798 SRR3734820 SRR3734824 SRR3734825
+do
+   if [ -f ${ALNDIR}/${i}.splice ]; then 
+      echo "File ${i}.splice exists, I will not overwrite it..."
+   else
+      ${SWDIR}/bin/junc ${ALNDIR}/${i}_Aligned.sortedByCoord.out.bam -a > ${ALNDIR}/${i}.splice &
+   fi
+done
+
+for i in SRR3734806 SRR3734807 SRR3734813
+do
+   if [ -f ${ALNDIR}/Multi/${i}.splice ]; then
+      echo "File ${i}.splice exists, I will not overwrite it..."
+   else
+      ${SWDIR}/bin/junc ${ALNDIR}/Multi/${i}_Aligned.sortedByCoord.out.bam -a > ${ALNDIR}/Multi/${i}.splice &
+   fi
+done
+
+wait
+
+## Part 5: multi-way comparison; example - report raw read counts only
+python3 ${SWDIR}/run.py --splice-list splicepaths.multi.mntjulip.tsv \
+                        --anno-file ${ANNOT} \
+                        --out-dir ${WORKDIR}/Multi \
+                        --num-threads 24 &> mntjulip.multi.log
+
+wait
+
+exit;

@@ -1,0 +1,8 @@
+module load sra-tools/3.0.3
+
+fasterq-dump SRR1793544 -O SRR1793544 --split-3
+fasterq-dump SRR1793545 -O SRR1793545 --split-3
+fasterq-dump SRR1793546 -O SRR1793546 --split-3
+fasterq-dump SRR1793547 -O SRR1793547 --split-3
+fasterq-dump SRR1793548 -O SRR1793548 --split-3
+fasterq-dump SRR1793549 -O SRR1793549 --split-3
