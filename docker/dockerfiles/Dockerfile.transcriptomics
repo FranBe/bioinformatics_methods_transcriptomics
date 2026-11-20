@@ -1,0 +1,245 @@
+# ============================================================
+# ATTENTION: this Dockerfile is under construction and may not be fully functional yet.
+# ============================================================
+
+# There is work to do regarging packages versions,dependencies and environment.
+
+
+
+# ============================================================
+# STAGE 1: BUILDER
+# ============================================================
+FROM mambaorg/micromamba:2.0.5 AS builder
+
+USER root
+
+ENV MAMBA_ROOT_PREFIX=/opt/conda
+ENV TOOLS=/opt/tools
+
+# ------------------------------------------------------------
+# System dependencies: compilers, Perl, libraries
+# ------------------------------------------------------------
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc g++ gfortran make cmake \
+    git wget curl ca-certificates \
+    perl \
+    zlib1g-dev \
+    libbz2-dev \
+    liblzma-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    libxml2-dev \
+    libgsl-dev \
+    libboost-all-dev \
+    libeigen3-dev \
+    pkg-config \
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p ${TOOLS}/bin
+
+# ------------------------------------------------------------
+# STAR 2.7.11b
+# ------------------------------------------------------------
+WORKDIR /tmp/build
+
+RUN wget -q https://github.com/alexdobin/STAR/archive/refs/tags/2.7.11b.tar.gz \
+    -O star.tar.gz \
+    && tar -xzf star.tar.gz \
+    && cd STAR-2.7.11b/source \
+    && make -j$(nproc) STAR \
+    && cp STAR ${TOOLS}/bin/STAR
+
+# ------------------------------------------------------------
+# SAMtools 1.10 + embedded HTSlib 1.10
+# ------------------------------------------------------------
+RUN wget -q https://github.com/samtools/samtools/releases/download/1.10/samtools-1.10.tar.bz2 \
+    -O samtools.tar.bz2 \
+    && tar -xjf samtools.tar.bz2 \
+    && cd samtools-1.10 \
+    && ./configure --prefix=${TOOLS} \
+    && make -j$(nproc) \
+    && make install
+
+# ------------------------------------------------------------
+# Minimap2 2.28
+# ------------------------------------------------------------
+RUN git clone --depth 1 --branch v2.28 \
+    https://github.com/lh3/minimap2.git \
+    && cd minimap2 \
+    && make -j$(nproc) \
+    && cp minimap2 ${TOOLS}/bin/minimap2
+
+# ------------------------------------------------------------
+# bedtools 2.31.1
+# ------------------------------------------------------------
+RUN wget -q https://github.com/arq5x/bedtools2/archive/refs/tags/v2.31.1.tar.gz \
+    -O bedtools.tar.gz \
+    && tar -xzf bedtools.tar.gz \
+    && cd bedtools2-2.31.1 \
+    && make -j$(nproc) \
+    && cp bin/bedtools ${TOOLS}/bin/bedtools
+
+# ------------------------------------------------------------
+# PsiCLASS 1.0.3
+# ------------------------------------------------------------
+RUN git clone --depth 1 --branch v1.0.3 \
+    https://github.com/splicebox/PsiCLASS.git \
+    && cd PsiCLASS \
+    && make -j$(nproc) \
+    && cp -a . ${TOOLS}/psiclass
+
+ENV PATH="${TOOLS}/bin:${TOOLS}/psiclass:${PATH}"
+
+# ------------------------------------------------------------
+# Conda: Jupyter environment
+# ------------------------------------------------------------
+RUN micromamba create -y -n jupyter \
+    -c conda-forge \
+    python=3.11 \
+    jupyterlab \
+    ipykernel \
+    bash_kernel \
+    pandas \
+    numpy \
+    matplotlib \
+    && micromamba clean --all --yes
+
+# ------------------------------------------------------------
+# Conda: RNA-seq and DESeq2
+# ------------------------------------------------------------
+RUN micromamba create -y -n rnaseq \
+    -c conda-forge -c bioconda \
+    python=3.10 \
+    r-base=4.3 \
+    bioconductor-deseq2=1.42.1 \
+    sra-tools \
+    && micromamba clean --all --yes
+
+# ------------------------------------------------------------
+# Conda: MntJULiP 1.5
+# Uses the repository's own environment specification
+# ------------------------------------------------------------
+RUN git clone --depth 1 --branch master-covariate \
+    https://github.com/splicebox/MntJULiP.git /tmp/MntJULiP \
+    && micromamba env create -f /tmp/MntJULiP/mntjulip_cov.yml \
+    && micromamba run -n mj-cov \
+       python /tmp/MntJULiP/setup.py install \
+    && micromamba clean --all --yes
+
+# ------------------------------------------------------------
+# Conda: rMATS 4.3.0
+# ------------------------------------------------------------
+RUN micromamba create -y -n rmats \
+    -c conda-forge -c bioconda \
+    rmats=4.3.0 \
+    && micromamba clean --all --yes
+
+# ------------------------------------------------------------
+# Conda: FLAIR 2.0.0
+# ------------------------------------------------------------
+RUN micromamba create -y -n flair \
+    -c conda-forge -c bioconda \
+    flair=2.0.0 \
+    && micromamba clean --all --yes
+
+# ------------------------------------------------------------
+# Conda: IsoQuant 3.4.1
+# ------------------------------------------------------------
+RUN micromamba create -y -n isoquant \
+    -c conda-forge -c bioconda \
+    python=3.12 \
+    isoquant=3.4.1 \
+    && micromamba clean --all --yes
+
+# ------------------------------------------------------------
+# Conda: LIQA 1.3.4
+# ------------------------------------------------------------
+RUN micromamba create -y -n liqa \
+    -c conda-forge -c bioconda \
+    liqa=1.3.4 \
+    && micromamba clean --all --yes
+
+# ------------------------------------------------------------
+# Conda: DRIMSeq 1.30.0
+# ------------------------------------------------------------
+RUN micromamba create -y -n drimseq \
+    -c conda-forge -c bioconda \
+    r-base=4.3 \
+    bioconductor-drimseq=1.30.0 \
+    && micromamba clean --all --yes
+
+# ------------------------------------------------------------
+# Conda: Jutils 1.5
+# ------------------------------------------------------------
+RUN micromamba create -y -n jutils \
+    -c conda-forge \
+    python=3.10 \
+    r-base=4.3 \
+    pandas numpy seaborn matplotlib scikit-learn \
+    r-ggplot2 r-gridextra r-data.table \
+    && git clone --depth 1 \
+       https://github.com/splicebox/Jutils.git /opt/Jutils \
+    && micromamba clean --all --yes
+
+
+# ============================================================
+# STAGE 2: RUNNER
+# ============================================================
+FROM mambaorg/micromamba:2.0.5 AS runner
+
+USER root
+
+ENV MAMBA_ROOT_PREFIX=/opt/conda
+ENV TOOLS=/opt/tools
+
+# Runtime libraries, Perl and system utilities
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    perl \
+    libgomp1 \
+    libstdc++6 \
+    libgcc-s1 \
+    zlib1g \
+    libbz2-1.0 \
+    liblzma5 \
+    libcurl4 \
+    libssl3 \
+    libxml2 \
+    libncurses5 \
+    libncursesw5 \
+    libgsl27 \
+    libboost-all-dev \
+    curl \
+    ca-certificates \
+    bash \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy compiled binaries and Conda environments
+COPY --from=builder /opt/tools /opt/tools
+COPY --from=builder /opt/conda /opt/conda
+COPY --from=builder /opt/Jutils /opt/Jutils
+
+ENV PATH="/opt/tools/bin:/opt/tools/psiclass:/opt/conda/envs/jupyter/bin:/opt/conda/bin:${PATH}"
+
+# Working directories
+WORKDIR /workspace
+
+RUN mkdir -p \
+    /workspace/data \
+    /workspace/references \
+    /workspace/results \
+    /workspace/notebooks
+
+# Jupyter configuration
+EXPOSE 8888
+
+CMD ["jupyter", "lab", \
+     "--ip=0.0.0.0", \
+     "--port=8888", \
+     "--no-browser", \
+     "--allow-root", \
+     "--ServerApp.token=''"]

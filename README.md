@@ -11,6 +11,14 @@ Beacuse I'm currently doing a posgraduate course in bioinformatics, I wanted to 
 
 ## Execution
 
+### Original Docker image
+
+
+```bash
+docker load -i <path to image tar file>/ cu_docker_v1.2.tar
+```
+
+
 
 
 
